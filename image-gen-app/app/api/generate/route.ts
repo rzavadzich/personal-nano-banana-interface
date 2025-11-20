@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
-    const { prompt } = await req.json();
+    const { prompt, model } = await req.json();
 
     if (!prompt) {
       return NextResponse.json({ error: 'Prompt is required' }, { status: 400 });
@@ -13,7 +13,11 @@ export async function POST(req: NextRequest) {
     // Using 'global' as per the user's curl example, but fallback to env or us-central1 if needed.
     // Publisher models are often at global or specific regions. The curl said 'global'.
     const location = 'global'; 
-    const modelId = 'gemini-3-pro-image-preview';
+    
+    // Validate and set model ID
+    const allowedModels = ['gemini-3-pro-image-preview', 'gemini-2.5-flash-image'];
+    const modelId = allowedModels.includes(model) ? model : 'gemini-3-pro-image-preview';
+    
     const apiEndpoint = `https://aiplatform.googleapis.com/v1/projects/${projectId}/locations/${location}/publishers/google/models/${modelId}:generateContent`;
 
     const auth = new GoogleAuth({

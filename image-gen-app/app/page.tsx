@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 
 export default function Home() {
   const [prompt, setPrompt] = useState('');
+  const [selectedModel, setSelectedModel] = useState('gemini-3-pro-image-preview');
   const [isLoading, setIsLoading] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -24,7 +25,7 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt, model: selectedModel }),
       });
 
       const data = await response.json();
@@ -129,28 +130,42 @@ export default function Home() {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="w-full max-w-xl flex gap-2 relative">
-          <input
-            type="text"
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Describe a hyper-realistic image..."
-            className="w-full h-12 pl-4 pr-12 rounded-full border border-neutral-200 dark:border-neutral-800 bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-            disabled={isLoading}
-          />
-          <button
-            type="submit"
-            disabled={isLoading || !prompt.trim()}
-            className={cn(
-              "absolute right-1 top-1 bottom-1 aspect-square rounded-full flex items-center justify-center transition-all",
-              isLoading || !prompt.trim() 
-                ? "bg-neutral-100 text-neutral-400 dark:bg-neutral-800 dark:text-neutral-600" 
-                : "bg-blue-600 text-white hover:bg-blue-700 shadow-md hover:shadow-lg"
-            )}
-          >
-            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
-          </button>
-        </form>
+        <div className="w-full max-w-xl flex flex-col gap-4">
+          <div className="flex justify-center">
+            <select
+              value={selectedModel}
+              onChange={(e) => setSelectedModel(e.target.value)}
+              className="px-4 py-2 rounded-full border border-neutral-200 dark:border-neutral-800 bg-white/50 dark:bg-neutral-900/50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm"
+              disabled={isLoading}
+            >
+              <option value="gemini-3-pro-image-preview">Gemini 3 Pro (Premium Quality)</option>
+              <option value="gemini-2.5-flash-image">Gemini 2.5 Flash (Fast & Efficient)</option>
+            </select>
+          </div>
+
+          <form onSubmit={handleSubmit} className="w-full flex gap-2 relative">
+            <input
+              type="text"
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              placeholder="Describe a hyper-realistic image..."
+              className="w-full h-12 pl-4 pr-12 rounded-full border border-neutral-200 dark:border-neutral-800 bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              disabled={isLoading}
+            />
+            <button
+              type="submit"
+              disabled={isLoading || !prompt.trim()}
+              className={cn(
+                "absolute right-1 top-1 bottom-1 aspect-square rounded-full flex items-center justify-center transition-all",
+                isLoading || !prompt.trim() 
+                  ? "bg-neutral-100 text-neutral-400 dark:bg-neutral-800 dark:text-neutral-600" 
+                  : "bg-blue-600 text-white hover:bg-blue-700 shadow-md hover:shadow-lg"
+              )}
+            >
+              {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+            </button>
+          </form>
+        </div>
       </main>
     </div>
   );
