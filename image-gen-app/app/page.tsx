@@ -80,10 +80,10 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 sm:p-8 font-[family-name:var(--font-geist-sans)]">
-      <main className="w-full max-w-3xl flex flex-col gap-8 items-center text-center">
+    <div className="min-h-screen bg-background flex flex-col items-center font-[family-name:var(--font-geist-sans)] relative">
+      <main className="w-full flex flex-col items-center justify-center flex-1 p-4 sm:p-8 pb-40 gap-8">
         
-        <div className="space-y-2">
+        <div className="space-y-2 text-center">
           <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl text-foreground">
             Gemini Image Gen
           </h1>
@@ -92,7 +92,7 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="w-full p-6 rounded-2xl border bg-card text-card-foreground shadow-sm bg-white/5 border-white/10">
+        <div className="w-full max-w-5xl p-6 rounded-2xl border bg-card text-card-foreground shadow-sm bg-white/5 border-white/10">
           {error && (
             <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-red-500 flex items-center gap-2 text-sm">
               <AlertCircle className="w-4 h-4" />
@@ -100,7 +100,7 @@ export default function Home() {
             </div>
           )}
 
-          <div className="aspect-square w-full max-w-md mx-auto bg-neutral-900 rounded-xl border border-neutral-800 flex items-center justify-center overflow-hidden relative group">
+          <div className="aspect-video w-full mx-auto bg-neutral-900 rounded-xl border border-neutral-800 flex items-center justify-center overflow-hidden relative group">
              {isLoading ? (
                <div className="flex flex-col items-center gap-3 text-neutral-400 animate-pulse">
                  <Loader2 className="w-8 h-8 animate-spin" />
@@ -129,8 +129,10 @@ export default function Home() {
              )}
           </div>
         </div>
+      </main>
 
-        <div className="w-full max-w-xl flex flex-col gap-4">
+      <div className="fixed bottom-0 left-0 right-0 p-6 bg-background/80 backdrop-blur-lg border-t border-white/10 flex justify-center items-center gap-4 z-50">
+        <div className="w-full max-w-3xl flex flex-col gap-4">
           <div className="flex justify-center">
             <select
               value={selectedModel}
@@ -166,7 +168,7 @@ export default function Home() {
             </button>
           </form>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
